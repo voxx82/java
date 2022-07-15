@@ -3,26 +3,36 @@ package org.example.lesson2;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+
+
 
 public class NumberList <T extends Number> implements List<T> {
     private T[] array;
     private int size;
 
-    Integer sumIntegers() {
-        Integer Sum = 0;
-        if(getClass() != NumberList) {
-            for(int i = 0; i < array.length; i++){
-                array.;
-            }
-        }
-        return Sum;
-    }
-
-
-    public NumberList(Class<T> clazz)  {
+    public NumberList(Class<T> clazz) {
         this.array = (T[]) Array.newInstance(clazz, 10);
     }
+
+//    Integer sumIntegers() {
+//        Integer Sum = 0;
+//
+//        return (Integer) Sum;
+//    }
+//
+//    Double getDouble(int index) {
+//        Integer Sum = 0;
+//        if(getClass() != NumberList) {
+//            for(int i = 0; i < array.length; i++){
+//                array.;
+//            }
+//        }
+//        return (Double) array[index];
+//    }
+
 
     public int getLength() {
         return array.length;
@@ -35,7 +45,7 @@ public class NumberList <T extends Number> implements List<T> {
 
     @Override
     public boolean isEmpty() {
-        return size==0;
+        return size == 0;
     }
 
     @Override
@@ -54,7 +64,7 @@ public class NumberList <T extends Number> implements List<T> {
         return result;
     }
 
-   @Override
+    @Override
     public Iterator<T> iterator() {
         return null;
     }
@@ -66,6 +76,7 @@ public class NumberList <T extends Number> implements List<T> {
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
+
         return null;
     }
 
@@ -80,8 +91,8 @@ public class NumberList <T extends Number> implements List<T> {
             array = Arrays.copyOf(array, ((int) (array.length * 1.5)));
         }
 
-        for (int j=0; j < oldPart.length; j++) {
-            array[j+1] = oldPart[j];
+        for (int j = 0; j < oldPart.length; j++) {
+            array[j + 1] = oldPart[j];
         }
         return true;
     }
@@ -90,15 +101,15 @@ public class NumberList <T extends Number> implements List<T> {
     public boolean remove(Object o) {
         boolean result = false;
 
-        for (int i=0; i < array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             if (array[i] == null) {
                 break;
             } else if (array[i].equals(o)) {
                 size--;
                 result = true;
-                T[] finalPart = Arrays.copyOfRange(array, i+1, array.length);
+                T[] finalPart = Arrays.copyOfRange(array, i + 1, array.length);
                 for (int j = 0; j < finalPart.length; j++) {
-                    array[i+j] = finalPart[j];
+                    array[i + j] = finalPart[j];
                 }
             }
         }
@@ -148,9 +159,9 @@ public class NumberList <T extends Number> implements List<T> {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        for(int i=0; i < array.length; i++){
+        for (int i = 0; i < array.length; i++) {
             NumberList l1 = (NumberList) o;
-            if(l1.get(i) == array[i]) {
+            if (l1.get(i) == array[i]) {
                 continue;
             } else return false;
         }
@@ -159,7 +170,7 @@ public class NumberList <T extends Number> implements List<T> {
 
     @Override
     public int hashCode() {
-        return array.length*2/array.length;
+        return size * 31 + array.length * 29;
     }
 
     @Override
@@ -169,14 +180,26 @@ public class NumberList <T extends Number> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        array[index] = element;
-        return null;
+        return array[index] = element;
     }
 
     @Override
     public void add(int index, T element) {
+        T[] oldPart = Arrays.copyOfRange(array, index, size);
+
+        array[index] = element;
+        size++;
+
+        if (size >= array.length) {
+            array = Arrays.copyOf(array, ((int) (array.length * 1.5)));
+        }
+
+        for (int j = 0; j < oldPart.length; j++) {
+            array[index + j + 1] = oldPart[j];
+        }
 
     }
+
 
     @Override
     public T remove(int index) {
@@ -186,12 +209,25 @@ public class NumberList <T extends Number> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(o)) {
+                return i;
+            }
+        }
+        return -1;
     }
+
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        for (int i = array.length-1; i > 0; i--) {
+            if (array[i] == null) {
+                continue;
+            } else if(array[i].equals(o)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
