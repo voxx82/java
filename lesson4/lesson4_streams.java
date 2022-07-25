@@ -9,15 +9,10 @@ import java.util.stream.Stream;
 
 public class lesson4_streams {
     public static void main(String[] args) {
-        List<Integer> integers = List.of(1,2,3,4,5,5,8,9);
+        List<Integer> integers = List.of(1, 2, 3, 4, 5, 5, 8, 9);
         Random rnd = new Random();
 
-//        List<List<Integer>> lists = List.of(List.of(1, 2), List.of(3,4,5));
-////
-//        lists.stream();
-//                .flatMap(Collection::stream)
-//                .sorted()
-//                .forEach(System.out::println);
+
         integers.stream()
                 .filter(e -> e > 4)
                 .distinct()
@@ -32,14 +27,18 @@ public class lesson4_streams {
                 .reduce(Integer::sum)
                 .ifPresentOrElse(System.out::println, () -> System.out.println(0));
 
+        List<List<Integer>> lists = List.of(List.of(1, 2), List.of(3, 4, 5));
 
+        lists.stream()
+                .sorted((a, b) -> (a.size() - b.size()) * -1)
+                .flatMap(Collection::stream)
+                .forEach(System.out::println);
 
+        boolean asd = lists.stream()
+                .map(e -> e.stream().reduce((a,b) -> a + b).orElse(0))
+                .anyMatch(e -> e == 12);
 
-//                .flatMap(Collection::stream)
-//                .map(user -> user.setNumber()*10)
-//                .reduce(Integer::sum)
-//                .ifPresentOrElse(System.out::println, () -> System.out.println(0));
-
+        System.out.println(asd);
 
     }
 }
